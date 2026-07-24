@@ -1,0 +1,111 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8" />
+<meta name="shopify-api-key" content="0c296b109b0eb3a11cd7ba896724fc9d" />
+<script src="https://cdn.shopify.com/shopifycloud/app-bridge.js"></script>
+<title>Kamea Agents — Configuration</title>
+<style>
+  body { font-family: -apple-system, system-ui, sans-serif; max-width: 640px; margin: 40px auto; padding: 0 20px; color: #1a1a1a; }
+  label { display: block; margin-top: 16px; font-weight: 600; font-size: 14px; }
+  input, textarea, select { width: 100%; padding: 8px; margin-top: 4px; border: 1px solid #ccc; border-radius: 6px; font-size: 14px; box-sizing: border-box; font-family: inherit; background: #fff; }
+  textarea { min-height: 70px; }
+  button { margin-top: 20px; padding: 10px 18px; background: #2b2140; color: #fff; border: none; border-radius: 6px; cursor: pointer; font-size: 14px; }
+  #status { margin-top: 12px; font-size: 14px; }
+  .hint { color: #666; font-size: 12px; margin-top: 2px; font-weight: 400; }
+</style>
+</head>
+<body>
+  <h1>Configuration de l'agent</h1>
+  <div id="app">Chargement...</div>
+
+  <script>
+    const API_BASE = "https://ypcdbwaaxlwfvkhgcutk.supabase.co/functions/v1/shopify-admin";
+
+    const TONE_PRESETS = [
+      { value: "chaleureux et professionnel", label: "Chaleureux et professionnel — vouvoiement, rassurant" },
+      { value: "chaleureux, tutoiement", label: "Chaleureux et proche — tutoiement, décontracté" },
+      { value: "dynamique et enjoué, tutoiement", label: "Dynamique et enjoué — énergique, tutoiement" },
+    ];
+
+    function toneOptionsHtml(currentValue) {
+      const known = TONE_PRESETS.some((p) => p.value === currentValue);
+      const options = TONE_PRESETS.map(
+        (p) => `<option value="${p.value}" ${p.value === currentValue ? "selected" : ""}>${p.label}</option>`
+      );
+      if (!known && currentValue) {
+        options.push(`<option value="${currentValue}" selected>Personnalisé (actuel)</option>`);
+      }
+      return options.join("");
+    }
+
+    async function main() {
+      const token = await window.shopify.idToken();
+      const res = await fetch(API_BASE + '/config', {
+        headers: { Authorization: 'Bearer ' + token }
+      });
+      if (!res.ok) {
+        document.getElementById('app').innerHTML = '<p style="color:red">Erreur de chargement (' + res.status + ')</p>';
+        return;
+      }
+      const config = await res.json();
+
+      document.getElementById('app').innerHTML = `
+        <label>Nom affiché au client
+          <input id="display_name" type="text" value="${config.display_name ?? ''}" />
+          <div class="hint">Utilisé dans les réponses de l'assistant (ex. "Je transmets à l'équipe ...").</div>
+        </label>
+        <label>Ton de la marque
+          <select id="tone">${toneOptionsHtml(config.tone ?? '')}</select>
+        </label>
+        <label>Message légal (disclaimer)
+          <textarea id="disclaimer">${config.guardrails?.disclaimer ?? ''}</textarea>
+          <div class="hint">Affiché dans les réponses de l'assistant.</div>
+        </label>
+        <label>Nombre max de produits par réponse
+          <input id="max_products" type="number" min="1" max="5" value="${config.guardrails?.max_products_per_reply ?? 3}" />
+        </label>
+        <label>Identifiant numérique Telegram (pour les alertes)
+          <input id="telegram_chat_id" type="text" placeholder="ex. 1631934469 (pas @NomDuBot)" value="${config.telegram_chat_id ?? ''}" />
+          <div class="hint">
+            Optionnel — reçoit une alerte quand un client a besoin d'aide humaine (question de
+            santé, litige, détresse). <strong>Un nombre, pas le nom du bot</strong> (pas
+            <code>@NomDuBot</code>) — ton agence te le communique après avoir activé ton bot.
+            Pour créer le bot :
+            <ol style="margin:6px 0 0 18px; padding:0;">
+              <li>Dans Telegram, cherche <strong>@BotFather</strong>, envoie <code>/newbot</code> et suis les instructions (tu obtiens un token).</li>
+              <li>Cherche ton nouveau bot par son nom et envoie-lui n'importe quel message pour démarrer la conversation.</li>
+              <li>Le token et l'ID numérique qui en découlent doivent être transmis à ton agence pour être activés — contacte-nous avec ces informations, cette dernière étape n'est pas encore en libre-service.</li>
+            </ol>
+          </div>
+        </label>
+        <button id="save">Enregistrer</button>
+        <div id="status"></div>
+      `;
+
+      document.getElementById('save').addEventListener('click', async () => {
+        const freshToken = await window.shopify.idToken();
+        const body = {
+          display_name: document.getElementById('display_name').value,
+          tone: document.getElementById('tone').value,
+          telegram_chat_id: document.getElementById('telegram_chat_id').value,
+          guardrails: {
+            ...config.guardrails,
+            disclaimer: document.getElementById('disclaimer').value,
+            max_products_per_reply: Number(document.getElementById('max_products').value),
+          },
+        };
+        const putRes = await fetch(API_BASE + '/config', {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + freshToken },
+          body: JSON.stringify(body),
+        });
+        document.getElementById('status').textContent = putRes.ok ? '✅ Enregistré' : '❌ Erreur';
+      });
+    }
+    main().catch((err) => {
+      document.getElementById('app').innerHTML = '<p style="color:red">' + err + '</p>';
+    });
+  </script>
+</body>
+</html>
