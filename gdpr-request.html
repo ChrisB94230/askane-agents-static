@@ -1,0 +1,84 @@
+<!doctype html>
+<!--
+  Source de vérité de ce fichier. Déployé (copié à la main) sur GitHub Pages :
+  https://github.com/ChrisB94230/askane-agents-static -> https://chrisb94230.github.io/askane-agents-static/gdpr-request.html
+  Pensé pour être lié depuis la page de confidentialité du site client, avec le tenant en query
+  string : ?tenant=kamea-dev. Après toute modif ici, push aussi vers ce repo.
+-->
+<html>
+<head>
+<meta charset="utf-8" />
+<title>Demande de suppression de données</title>
+<style>
+  body { font-family: -apple-system, system-ui, sans-serif; max-width: 640px; margin: 40px auto; padding: 0 20px; color: #1a1a1a; }
+  label { display: block; margin-top: 16px; font-weight: 600; font-size: 14px; }
+  input, textarea { width: 100%; padding: 8px; margin-top: 4px; border: 1px solid #ccc; border-radius: 6px; font-size: 14px; box-sizing: border-box; font-family: inherit; background: #fff; }
+  input[readonly] { background: #f2f2f2; color: #666; }
+  textarea { min-height: 70px; }
+  button { margin-top: 20px; padding: 10px 18px; background: #2b2140; color: #fff; border: none; border-radius: 6px; cursor: pointer; font-size: 14px; }
+  button:disabled { opacity: 0.5; cursor: default; }
+  #status { margin-top: 12px; font-size: 14px; }
+  .hint { color: #666; font-size: 12px; margin-top: 2px; font-weight: 400; }
+</style>
+</head>
+<body>
+  <h1>Demande de suppression de mes données</h1>
+  <p>
+    Si vous avez échangé avec notre assistant virtuel, vous pouvez demander la suppression de vos
+    données personnelles (numéro de téléphone communiqué, historique de conversation) conformément
+    au RGPD. Votre demande sera traitée sous 30 jours.
+  </p>
+
+  <label>Boutique concernée
+    <input id="tenant" type="text" placeholder="ex. kamea-nature" />
+  </label>
+  <label>Votre numéro de téléphone ou email (celui utilisé lors de l'échange)
+    <input id="contact" type="text" placeholder="+33 6 12 34 56 78" />
+  </label>
+  <label>Message (optionnel)
+    <textarea id="message"></textarea>
+  </label>
+  <button id="submit">Envoyer la demande</button>
+  <div id="status"></div>
+
+  <script>
+    const API_BASE = "https://ypcdbwaaxlwfvkhgcutk.supabase.co/functions/v1/gdpr-request";
+
+    const params = new URLSearchParams(location.search);
+    const tenantParam = params.get("tenant");
+    const tenantInput = document.getElementById("tenant");
+    if (tenantParam) {
+      tenantInput.value = tenantParam;
+      tenantInput.readOnly = true;
+    }
+
+    document.getElementById("submit").addEventListener("click", async () => {
+      const statusEl = document.getElementById("status");
+      const contact = document.getElementById("contact").value.trim();
+      if (!contact) {
+        statusEl.textContent = "Merci de renseigner un téléphone ou un email.";
+        return;
+      }
+      const btn = document.getElementById("submit");
+      btn.disabled = true;
+      statusEl.textContent = "Envoi...";
+      try {
+        const res = await fetch(API_BASE, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            tenantSlug: tenantInput.value.trim() || null,
+            contactValue: contact,
+            message: document.getElementById("message").value.trim() || null,
+          }),
+        });
+        if (!res.ok) throw new Error("failed");
+        statusEl.textContent = "✅ Demande envoyée, elle sera traitée sous 30 jours.";
+      } catch (e) {
+        statusEl.textContent = "❌ Erreur, réessayez plus tard.";
+        btn.disabled = false;
+      }
+    });
+  </script>
+</body>
+</html>
