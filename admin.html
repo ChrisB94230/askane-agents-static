@@ -10,6 +10,13 @@
 <head>
 <meta charset="utf-8" />
 <meta name="shopify-api-key" content="0c296b109b0eb3a11cd7ba896724fc9d" />
+<script>
+  // Page partagée par plusieurs apps Shopify (prod + dev, cf. docs/dev-workflow.md) — le
+  // client_id vient de application_url (shopify.app*.toml), App Bridge doit charger avec le bon
+  // avant que le script ci-dessous ne s'exécute, d'où l'ordre : ce bloc avant app-bridge.js.
+  const clientId = new URLSearchParams(location.search).get("client_id");
+  if (clientId) document.querySelector('meta[name="shopify-api-key"]').setAttribute("content", clientId);
+</script>
 <script src="https://cdn.shopify.com/shopifycloud/app-bridge.js"></script>
 <title>Askane Advisor — Configuration</title>
 <style>
