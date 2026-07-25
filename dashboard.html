@@ -1,0 +1,154 @@
+<!doctype html>
+<!--
+  Source de vérité de ce fichier. Déployé (copié à la main) sur GitHub Pages :
+  https://github.com/ChrisB94230/askane-agents-static -> https://chrisb94230.github.io/askane-agents-static/dashboard.html
+  Dashboard interne agence (pas Shopify-embedded, pas de contexte marchand) — protégé par un
+  mot de passe partagé simple (cf. docs/dev-workflow.md et agency-dashboard/index.ts).
+-->
+<html>
+<head>
+<meta charset="utf-8" />
+<title>Askane — Dashboard agence</title>
+<style>
+  body { font-family: -apple-system, system-ui, sans-serif; max-width: 900px; margin: 40px auto; padding: 0 20px; color: #1a1a1a; }
+  h1 { margin-bottom: 4px; }
+  h2 { margin-top: 32px; font-size: 16px; }
+  input, button { padding: 8px; border: 1px solid #ccc; border-radius: 6px; font-size: 14px; font-family: inherit; }
+  button { background: #2b2140; color: #fff; border: none; cursor: pointer; padding: 8px 16px; }
+  table { width: 100%; border-collapse: collapse; margin-top: 8px; font-size: 14px; }
+  th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid #eee; }
+  th { color: #666; font-weight: 600; font-size: 12px; text-transform: uppercase; }
+  .budget-ok { color: #1a7a3a; }
+  .budget-warn { color: #b45309; font-weight: 600; }
+  .budget-over { color: #b91c1c; font-weight: 600; }
+  .empty { color: #888; font-size: 13px; font-style: italic; }
+  #status { color: #b91c1c; font-size: 13px; margin-top: 8px; }
+  #login { margin-top: 60px; }
+</style>
+</head>
+<body>
+  <div id="login">
+    <h1>Dashboard agence</h1>
+    <input id="password" type="password" placeholder="Mot de passe" />
+    <button id="submit">Entrer</button>
+    <div id="status"></div>
+  </div>
+
+  <div id="app" style="display:none">
+    <h1>Dashboard agence</h1>
+    <p class="empty">Vue d'ensemble — mise à jour à chaque chargement de page.</p>
+
+    <h2>Tenants</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Boutique</th><th>Conversations</th><th>Messages</th><th>Tokens (mois)</th>
+          <th>Handoffs (30j)</th><th>Produits</th><th>Dernière ingestion</th>
+        </tr>
+      </thead>
+      <tbody id="tenants-body"></tbody>
+    </table>
+
+    <h2>Demandes RGPD en attente</h2>
+    <div id="gdpr-list"></div>
+
+    <h2>Contenu en attente de validation</h2>
+    <div id="content-list"></div>
+  </div>
+
+  <script>
+    const API_BASE = "https://ypcdbwaaxlwfvkhgcutk.supabase.co/functions/v1/agency-dashboard";
+
+    function fmtDate(iso) {
+      if (!iso) return "—";
+      return new Date(iso).toLocaleString("fr-FR");
+    }
+
+    function budgetClass(used, cap) {
+      if (!cap) return "";
+      const ratio = used / cap;
+      if (ratio >= 1) return "budget-over";
+      if (ratio >= 0.8) return "budget-warn";
+      return "budget-ok";
+    }
+
+    function renderTenants(tenants) {
+      document.getElementById("tenants-body").innerHTML = tenants.map((t) => `
+        <tr>
+          <td>${t.display_name || t.tenant_name}<br/><span class="empty">${t.shopify_domain}</span></td>
+          <td>${t.conversations_count}</td>
+          <td>${t.messages_count}</td>
+          <td class="${budgetClass(t.tokens_this_month, t.monthly_token_cap)}">${t.tokens_this_month.toLocaleString("fr-FR")} / ${(t.monthly_token_cap ?? 0).toLocaleString("fr-FR")}</td>
+          <td>${t.handoffs_30d}</td>
+          <td>${t.products_count}</td>
+          <td>${fmtDate(t.last_ingested_at)}</td>
+        </tr>
+      `).join("");
+    }
+
+    function renderGdpr(rows) {
+      const el = document.getElementById("gdpr-list");
+      if (!rows.length) { el.innerHTML = '<p class="empty">Aucune demande en attente.</p>'; return; }
+      el.innerHTML = `<table><thead><tr><th>Boutique</th><th>Contact</th><th>Message</th><th>Reçue le</th></tr></thead><tbody>
+        ${rows.map((r) => `<tr>
+          <td>${r.tenants?.name ?? r.shop_hint ?? "—"}</td>
+          <td>${r.contact_value}</td>
+          <td>${r.message ?? ""}</td>
+          <td>${fmtDate(r.created_at)}</td>
+        </tr>`).join("")}
+      </tbody></table>`;
+    }
+
+    function renderContent(rows) {
+      const el = document.getElementById("content-list");
+      if (!rows.length) { el.innerHTML = '<p class="empty">Aucun brouillon en attente.</p>'; return; }
+      el.innerHTML = `<table><thead><tr><th>Boutique</th><th>Source</th><th>Aperçu</th><th>Généré le</th></tr></thead><tbody>
+        ${rows.map((r) => `<tr>
+          <td>${r.tenants?.name ?? "—"}</td>
+          <td>${r.source ?? "—"}</td>
+          <td>${(r.generated?.title ?? r.generated?.blog?.title ?? JSON.stringify(r.generated ?? {}).slice(0, 60))}</td>
+          <td>${fmtDate(r.created_at)}</td>
+        </tr>`).join("")}
+      </tbody></table>`;
+    }
+
+    async function loadOverview(password) {
+      const statusEl = document.getElementById("status");
+      statusEl.textContent = "";
+      try {
+        const res = await fetch(API_BASE + "/overview", { headers: { "x-dashboard-secret": password } });
+        if (res.status === 401) { statusEl.textContent = "Mot de passe incorrect."; return false; }
+        if (res.status === 429) { statusEl.textContent = "Trop de tentatives, réessaie dans une minute."; return false; }
+        if (!res.ok) { statusEl.textContent = "Erreur serveur."; return false; }
+        const data = await res.json();
+        renderTenants(data.tenants);
+        renderGdpr(data.gdpr);
+        renderContent(data.content);
+        return true;
+      } catch (e) {
+        statusEl.textContent = "Erreur réseau.";
+        return false;
+      }
+    }
+
+    async function tryLogin(password) {
+      const ok = await loadOverview(password);
+      if (ok) {
+        sessionStorage.setItem("dashboard_secret", password);
+        document.getElementById("login").style.display = "none";
+        document.getElementById("app").style.display = "block";
+      }
+    }
+
+    document.getElementById("submit").addEventListener("click", () => {
+      tryLogin(document.getElementById("password").value);
+    });
+    document.getElementById("password").addEventListener("keydown", (e) => {
+      if (e.key === "Enter") tryLogin(document.getElementById("password").value);
+    });
+
+    const saved = sessionStorage.getItem("dashboard_secret");
+    if (saved) tryLogin(saved);
+  </script>
+</body>
+</html>
