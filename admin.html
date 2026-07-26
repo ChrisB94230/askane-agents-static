@@ -79,6 +79,12 @@
         <label>Nombre max de produits par réponse
           <input id="max_products" type="number" min="1" max="5" value="${config.guardrails?.max_products_per_reply ?? 3}" />
         </label>
+        <label>Numéro WhatsApp de contact direct
+          <input id="whatsapp_number" type="text" placeholder="ex. +33 7 85 66 12 60" value="${config.whatsapp_number ?? ''}" />
+          <div class="hint">
+            Optionnel — proposé au visiteur en fin de conversation pour vous contacter directement.
+          </div>
+        </label>
         <label>Identifiant numérique Telegram (pour les alertes)
           <input id="telegram_chat_id" type="text" placeholder="ex. 1631934469 (pas @NomDuBot)" value="${config.telegram_chat_id ?? ''}" />
           <div class="hint">
@@ -102,6 +108,7 @@
         const body = {
           display_name: document.getElementById('display_name').value,
           tone: document.getElementById('tone').value,
+          whatsapp_number: document.getElementById('whatsapp_number').value,
           telegram_chat_id: document.getElementById('telegram_chat_id').value,
           guardrails: {
             ...config.guardrails,
