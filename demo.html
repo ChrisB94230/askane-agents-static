@@ -1,0 +1,80 @@
+<!doctype html>
+<!--
+  Source de vérité de ce fichier. Déployé (copié à la main) sur GitHub Pages :
+  https://github.com/ChrisB94230/askane-agents-static -> https://chrisb94230.github.io/askane-agents-static/demo.html
+  Page démo prospect (cf. docs/demo-provisioning.md) — template unique piloté par query string
+  (?tenant=demo-xxx&name=...), pas un fichier par prospect. Le tenant/nom viennent de la réponse
+  de POST /demo-provision. Après toute modif ici, push aussi vers ce repo.
+
+  Attention : kamea-advisor lit ses attributs une seule fois dans connectedCallback() — ils sont
+  donc posés ici via un <script> non-defer, avant que widget.js (defer) n'enregistre le custom
+  element, sinon le widget retombe sur son fallback "kamea-nature" (window.Shopify absent sur
+  une page hors Shopify) et chargerait le vrai catalogue Kamea au lieu du catalogue démo.
+
+  Image de fond : optionnelle, uploadée par l'agence via POST /demo-background (cf.
+  docs/demo-provisioning.md), récupérée ici via GET /demo-background (public, pas de secret —
+  c'est le prospect qui charge cette page). Dégradé par défaut si aucune image n'a été fournie.
+-->
+<html lang="fr">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="robots" content="noindex, nofollow" />
+<title>Démo Advisor</title>
+<style>
+  html, body { height: 100%; }
+  body {
+    font-family: -apple-system, system-ui, sans-serif; margin: 0; color: #1a1a1a;
+    background: linear-gradient(135deg, #2b2140 0%, #6a5a94 100%);
+    background-size: cover; background-position: center; transition: background-image 0.3s ease;
+  }
+  .overlay { min-height: 100vh; display: flex; align-items: center; box-sizing: border-box; padding: 24px; background: linear-gradient(180deg, rgba(0,0,0,0.35) 0%, rgba(0,0,0,0.15) 100%); }
+  .card { max-width: 640px; margin: 0 auto; background: rgba(255,255,255,0.96); border-radius: 16px; padding: 32px 36px; box-shadow: 0 10px 40px rgba(0,0,0,0.25); }
+  h1 { color: #2b2140; font-size: 22px; margin-top: 0; }
+  p { color: #444; line-height: 1.5; }
+  .badge { display: inline-block; background: #f2f0f7; color: #2b2140; padding: 4px 10px; border-radius: 999px; font-size: 12px; font-weight: 600; margin-bottom: 16px; }
+</style>
+</head>
+<body>
+  <div class="overlay">
+    <div class="card">
+      <div class="badge">Démo — ne remplace pas encore une installation sur votre boutique</div>
+      <h1 id="heading">Voici à quoi ressemblerait votre conseiller IA</h1>
+      <p>
+        Cliquez sur la bulle en bas à droite pour discuter avec l'Advisor, déjà chargé avec quelques
+        produits réels de votre boutique. Posez-lui une question comme si vous étiez un client.
+      </p>
+    </div>
+  </div>
+
+  <kamea-advisor id="advisor" position="bottom-right"></kamea-advisor>
+
+  <script>
+    const params = new URLSearchParams(location.search);
+    const tenant = params.get("tenant") || "";
+    const name = params.get("name") || tenant || "votre boutique";
+    document.title = name + " — Démo Advisor";
+    document.getElementById("heading").textContent = "Voici à quoi ressemblerait le conseiller IA de " + name;
+
+    const advisor = document.getElementById("advisor");
+    advisor.setAttribute("tenant", tenant);
+    advisor.setAttribute("api-url", "https://ypcdbwaaxlwfvkhgcutk.supabase.co/functions/v1/chat");
+    advisor.setAttribute("api-key", "sb_publishable_jGg4tpsYizy9NLexroc7Cw_Q0X5AuTc");
+    advisor.setAttribute("display-name", name);
+
+    if (!tenant) {
+      document.getElementById("heading").textContent = "Lien de démo invalide (paramètre tenant manquant)";
+    } else {
+      fetch("https://ypcdbwaaxlwfvkhgcutk.supabase.co/functions/v1/demo-background?tenant=" + encodeURIComponent(tenant))
+        .then((res) => (res.ok ? res.json() : null))
+        .then((data) => {
+          if (data && data.backgroundUrl) {
+            document.body.style.backgroundImage = "url('" + data.backgroundUrl + "')";
+          }
+        })
+        .catch(() => {}); // Dégradé par défaut déjà en place si l'appel échoue.
+    }
+  </script>
+  <script src="widget.js" defer></script>
+</body>
+</html>
