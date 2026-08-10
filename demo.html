@@ -14,6 +14,11 @@
   Image de fond : optionnelle, uploadée par l'agence via POST /demo-background (cf.
   docs/demo-provisioning.md), récupérée ici via GET /demo-background (public, pas de secret —
   c'est le prospect qui charge cette page). Dégradé par défaut si aucune image n'a été fournie.
+
+  Liste des produits : récupérée via GET /demo-products (public, même logique que
+  /demo-background) — affichée en bas de l'encadré pour que le prospect sache sur quoi il peut
+  interroger l'Advisor plutôt que de deviner. Masquée si la démo n'a aucun produit (ne devrait
+  pas arriver en usage normal, mais évite un titre de section vide).
 -->
 <html lang="fr">
 <head>
@@ -33,6 +38,9 @@
   h1 { color: #2b2140; font-size: 22px; margin-top: 0; }
   p { color: #444; line-height: 1.5; }
   .badge { display: inline-block; background: #f2f0f7; color: #2b2140; padding: 4px 10px; border-radius: 999px; font-size: 12px; font-weight: 600; margin-bottom: 16px; }
+  .products-section { display: none; margin-top: 20px; padding-top: 16px; border-top: 1px solid #eee; }
+  .products-section h2 { font-size: 13px; font-weight: 600; color: #2b2140; margin: 0 0 8px; text-transform: uppercase; letter-spacing: 0.02em; }
+  .products-section ul { margin: 0; padding-left: 20px; color: #444; font-size: 13px; line-height: 1.7; }
 </style>
 </head>
 <body>
@@ -44,6 +52,10 @@
         Cliquez sur la bulle en bas à droite pour discuter avec l'Advisor, déjà chargé avec quelques
         produits réels de votre boutique. Posez-lui une question comme si vous étiez un client.
       </p>
+      <div class="products-section" id="products-section">
+        <h2>Produits inclus dans cette démo</h2>
+        <ul id="products-list"></ul>
+      </div>
     </div>
   </div>
 
@@ -74,6 +86,28 @@
           }
         })
         .catch(() => {}); // Dégradé par défaut déjà en place si l'appel échoue.
+
+      fetch("https://ypcdbwaaxlwfvkhgcutk.supabase.co/functions/v1/demo-products?tenant=" + encodeURIComponent(tenant))
+        .then((res) => (res.ok ? res.json() : null))
+        .then((data) => {
+          const products = (data && data.products) || [];
+          if (products.length === 0) return;
+          const list = document.getElementById("products-list");
+          list.innerHTML = products
+            .map((p) => {
+              const price = p.price != null ? " — " + Number(p.price).toFixed(2) + " €" : "";
+              return "<li>" + escapeHtml(p.title) + price + "</li>";
+            })
+            .join("");
+          document.getElementById("products-section").style.display = "block";
+        })
+        .catch(() => {}); // Section masquée par défaut si l'appel échoue.
+    }
+
+    function escapeHtml(str) {
+      const div = document.createElement("div");
+      div.textContent = str;
+      return div.innerHTML;
     }
   </script>
   <script src="widget.js" defer></script>
