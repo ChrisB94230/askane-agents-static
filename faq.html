@@ -1,0 +1,287 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Askane Advisor — Questions fréquentes</title>
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+
+<style>
+  :root {
+    --ink: #15201a;
+    --ink-soft: #4b5a51;
+    --bg: #f7faf8;
+    --surface: #ffffff;
+    --surface-2: #eef4f0;
+    --border: #dde8e1;
+    --accent: #3d5ff0;
+    --accent-2: #2f7a54;
+    --accent-2-soft: #e3f1e9;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --ink: #eef3ef;
+      --ink-soft: #a9bab1;
+      --bg: #10160f;
+      --surface: #172018;
+      --surface-2: #1d281f;
+      --border: #2a362c;
+      --accent: #6c86ff;
+      --accent-2: #6bc699;
+      --accent-2-soft: #1c2f24;
+    }
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: "IBM Plex Sans", system-ui, -apple-system, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1, h2, .display {
+    font-family: "Space Grotesk", system-ui, sans-serif;
+    font-weight: 700;
+    margin: 0;
+  }
+
+  a { color: var(--accent); }
+  a:hover { color: var(--accent-2); }
+
+  .wrap {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 0 28px 96px;
+  }
+
+  header.top {
+    padding: 28px 0;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 8px;
+  }
+  .top-inner {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 0 28px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .brand-name {
+    font-family: "Space Grotesk", sans-serif;
+    font-weight: 700;
+    font-size: 17px;
+  }
+  .brand-sub {
+    font-size: 12px;
+    color: var(--ink-soft);
+  }
+
+  .doc-head {
+    padding: 56px 0 36px;
+  }
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 16px;
+  }
+  .eyebrow::before {
+    content: "";
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--accent);
+  }
+  h1 {
+    font-size: clamp(28px, 4vw, 38px);
+    line-height: 1.12;
+    letter-spacing: -0.01em;
+  }
+  .lede {
+    margin-top: 24px;
+    font-size: 17px;
+    line-height: 1.6;
+    color: var(--ink-soft);
+    max-width: 62ch;
+  }
+
+  section.doc {
+    padding: 30px 0;
+    border-top: 1px solid var(--border);
+    max-width: 66ch;
+  }
+  section.doc h2 {
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 18px;
+  }
+  .qa + .qa { margin-top: 22px; }
+  .qa dt {
+    font-family: "Space Grotesk", sans-serif;
+    font-weight: 700;
+    font-size: 16.5px;
+    color: var(--ink);
+    margin-bottom: 6px;
+  }
+  .qa dd {
+    margin: 0;
+    font-size: 15px;
+    line-height: 1.65;
+    color: var(--ink-soft);
+  }
+
+  footer {
+    padding: 32px 0 0;
+    border-top: 1px solid var(--border);
+    font-size: 13px;
+    color: var(--ink-soft);
+  }
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="top-inner">
+    <svg width="22" height="22" viewBox="0 0 100 100" aria-hidden="true">
+      <polygon points="18,82 44,18 55,18 29,82" fill="#15201a"/>
+      <polygon points="48,82 69,34 80,34 59,82" fill="#3d5ff0"/>
+    </svg>
+    <div>
+      <div class="brand-name">Askane Advisor</div>
+      <div class="brand-sub">par Askane Studio</div>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <div class="doc-head">
+    <div class="eyebrow">Questions fréquentes</div>
+    <h1>Comment ça marche, et quoi faire si ça coince</h1>
+    <p class="lede">Les réponses aux questions les plus courantes sur l'installation, le
+      fonctionnement et la facturation d'Askane Advisor.</p>
+  </div>
+
+  <section class="doc">
+    <h2>Installation</h2>
+
+    <dl class="qa">
+      <dt>Comment installer Askane Advisor sur ma boutique ?</dt>
+      <dd>Depuis la fiche App Store, cliquez sur « Installer l'app » et approuvez les permissions
+        demandées (lecture du catalogue produits et du stock). Votre catalogue est automatiquement
+        analysé — aucune configuration technique n'est nécessaire pour démarrer.</dd>
+    </dl>
+
+    <dl class="qa">
+      <dt>Le widget n'apparaît pas sur ma boutique, que faire ?</dt>
+      <dd>Après l'installation, Shopify ne permet pas d'activer automatiquement un widget dans un
+        thème — c'est la seule étape manuelle restante. Allez dans <strong>Boutique en ligne →
+        Personnaliser → App embeds</strong>, et activez Askane Advisor.</dd>
+    </dl>
+
+    <dl class="qa">
+      <dt>Puis-je désinstaller et réinstaller sans perdre ma configuration ?</dt>
+      <dd>Oui, votre configuration (ton, message d'accueil, alertes) est conservée si vous
+        réinstallez l'app sur la même boutique.</dd>
+    </dl>
+  </section>
+
+  <section class="doc">
+    <h2>Fonctionnement</h2>
+
+    <dl class="qa">
+      <dt>Comment le conseiller choisit-il les produits à recommander ?</dt>
+      <dd>Il analyse la demande du client en langage naturel et la compare à votre catalogue
+        indexé, pour ne proposer que des produits réellement disponibles en stock et pertinents
+        par rapport à l'intention exprimée.</dd>
+    </dl>
+
+    <dl class="qa">
+      <dt>Puis-je changer le ton, le message d'accueil, la langue ?</dt>
+      <dd>Oui, tout se règle depuis la page de configuration intégrée à votre admin Shopify — ton
+        de la conversation, message d'accueil, nombre de produits recommandés par réponse, et un
+        message de non-responsabilité si votre secteur en a besoin.</dd>
+    </dl>
+
+    <dl class="qa">
+      <dt>Le conseiller a-t-il accès à mes commandes ou à l'historique d'achat de mes clients ?</dt>
+      <dd>Non. L'app a uniquement accès, en lecture seule, à votre catalogue produits et à votre
+        stock — jamais aux commandes, aux moyens de paiement ni aux données de compte client.</dd>
+    </dl>
+  </section>
+
+  <section class="doc">
+    <h2>Alertes</h2>
+
+    <dl class="qa">
+      <dt>Comment fonctionnent les alertes en cas de litige ?</dt>
+      <dd>Quand une conversation signale une insatisfaction ou un litige, une alerte est envoyée
+        instantanément sur le canal Telegram que vous avez connecté — vous êtes informé avant que
+        le problème ne s'aggrave, plutôt que de le découvrir dans un avis public.</dd>
+    </dl>
+
+    <dl class="qa">
+      <dt>Puis-je désactiver les alertes ?</dt>
+      <dd>Oui, depuis la page de configuration de l'app.</dd>
+    </dl>
+  </section>
+
+  <section class="doc">
+    <h2>Facturation</h2>
+
+    <dl class="qa">
+      <dt>Comment fonctionne la facturation ?</dt>
+      <dd>Directement via Shopify, sur votre facture habituelle — aucune carte à saisir ailleurs.
+        Le tarif dépend de la taille de votre catalogue. Détail complet sur la
+        <a href="./pricing.html">page Tarifs</a>.</dd>
+    </dl>
+
+    <dl class="qa">
+      <dt>Puis-je changer de palier ou annuler à tout moment ?</dt>
+      <dd>Oui. Un changement de palier nécessite toujours votre accord explicite — jamais de
+        changement silencieux — et l'annulation se fait directement depuis votre admin Shopify,
+        sans préavis ni justification.</dd>
+    </dl>
+  </section>
+
+  <section class="doc">
+    <h2>Confidentialité</h2>
+
+    <dl class="qa">
+      <dt>Quelles données sont collectées sur mes clients ?</dt>
+      <dd>Le contenu des conversations et un identifiant de canal (email, téléphone ou identifiant
+        Shopify selon le cas), toujours avec le consentement explicite du client avant tout
+        échange. Détail complet sur la
+        <a href="./privacy.html">politique de confidentialité</a>.</dd>
+    </dl>
+  </section>
+
+  <section class="doc">
+    <h2>Support</h2>
+
+    <dl class="qa">
+      <dt>Comment contacter le support ?</dt>
+      <dd>Écrivez à <a href="mailto:chrisbadji@gmail.com">chrisbadji@gmail.com</a> — on vous
+        répond directement.</dd>
+    </dl>
+  </section>
+
+  <footer>Cette page sera mise à jour si le fonctionnement d'Askane Advisor évolue.</footer>
+
+</div>
+</body>
+</html>
