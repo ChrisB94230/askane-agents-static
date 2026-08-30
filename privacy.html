@@ -1,0 +1,373 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Askane Advisor — Politique de confidentialité</title>
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+
+<style>
+  :root {
+    --ink: #15201a;
+    --ink-soft: #4b5a51;
+    --bg: #f7faf8;
+    --surface: #ffffff;
+    --surface-2: #eef4f0;
+    --border: #dde8e1;
+    --accent: #3d5ff0;
+    --accent-2: #2f7a54;
+    --accent-2-soft: #e3f1e9;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: "IBM Plex Sans", system-ui, -apple-system, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1, h2, .display {
+    font-family: "Space Grotesk", system-ui, sans-serif;
+    font-weight: 700;
+    margin: 0;
+  }
+
+  a { color: var(--accent); }
+  a:hover { color: var(--accent-2); }
+
+  .wrap {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 0 28px 96px;
+  }
+
+  header.top {
+    padding: 28px 0;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 8px;
+  }
+  .top-inner {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 0 28px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .brand-name {
+    font-family: "Space Grotesk", sans-serif;
+    font-weight: 700;
+    font-size: 17px;
+  }
+  .brand-sub {
+    font-size: 12px;
+    color: var(--ink-soft);
+  }
+
+  .doc-head {
+    padding: 56px 0 36px;
+  }
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 16px;
+  }
+  .eyebrow::before {
+    content: "";
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--accent);
+  }
+  h1 {
+    font-size: clamp(28px, 4vw, 38px);
+    line-height: 1.12;
+    letter-spacing: -0.01em;
+  }
+  .meta {
+    margin-top: 14px;
+    font-size: 14px;
+    color: var(--ink-soft);
+  }
+  .lede {
+    margin-top: 24px;
+    font-size: 17px;
+    line-height: 1.6;
+    color: var(--ink-soft);
+    max-width: 62ch;
+  }
+
+  .toc {
+    margin-top: 32px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 18px 22px;
+  }
+  .toc-title {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin-bottom: 10px;
+  }
+  .toc ol {
+    margin: 0;
+    padding-left: 18px;
+    columns: 2;
+    column-gap: 24px;
+    font-size: 14px;
+    line-height: 1.9;
+  }
+  @media (max-width: 560px) {
+    .toc ol { columns: 1; }
+  }
+
+  section.doc {
+    padding: 34px 0;
+    border-top: 1px solid var(--border);
+    max-width: 66ch;
+  }
+  section.doc h2 {
+    font-size: 20px;
+    letter-spacing: -0.005em;
+    margin-bottom: 14px;
+  }
+  section.doc p, section.doc li {
+    font-size: 15.5px;
+    line-height: 1.68;
+    color: var(--ink-soft);
+  }
+  section.doc p + p { margin-top: 14px; }
+  section.doc ul {
+    margin: 12px 0 0;
+    padding-left: 20px;
+  }
+  section.doc li + li { margin-top: 8px; }
+  section.doc strong { color: var(--ink); }
+
+  .callout {
+    margin-top: 16px;
+    background: var(--accent-2-soft);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px 18px;
+    font-size: 14.5px;
+    line-height: 1.6;
+  }
+  .callout strong { color: var(--accent-2); }
+
+  table.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 14px;
+    font-size: 14px;
+  }
+  table.data-table th, table.data-table td {
+    text-align: left;
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+  table.data-table th {
+    color: var(--ink);
+    font-weight: 600;
+    font-size: 12px;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+  }
+  .table-scroll { overflow-x: auto; }
+
+  footer {
+    padding: 32px 0 0;
+    border-top: 1px solid var(--border);
+    font-size: 13px;
+    color: var(--ink-soft);
+  }
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="top-inner">
+    <svg width="22" height="22" viewBox="0 0 100 100" aria-hidden="true">
+      <polygon points="18,82 44,18 55,18 29,82" fill="#15201a"/>
+      <polygon points="48,82 69,34 80,34 59,82" fill="#3d5ff0"/>
+    </svg>
+    <div>
+      <div class="brand-name">Askane Advisor</div>
+      <div class="brand-sub">par Askane Studio</div>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <div class="doc-head">
+    <div class="eyebrow">Confidentialité</div>
+    <h1>Politique de confidentialité</h1>
+    <div class="meta">Dernière mise à jour : 29 août 2026 — s'applique à l'application Askane Advisor installée sur une boutique Shopify.</div>
+    <p class="lede">Cette page explique quelles données Askane Advisor traite, pourquoi, avec qui
+      elles sont partagées, et comment les faire supprimer — en langage simple, sans jargon
+      juridique inutile.</p>
+
+    <div class="toc">
+      <div class="toc-title">Sommaire</div>
+      <ol>
+        <li>Qui fait quoi</li>
+        <li>Données de la boutique</li>
+        <li>Données des clients finaux</li>
+        <li>Pourquoi ces données</li>
+        <li>Ce que nous ne collectons jamais</li>
+        <li>Sous-traitants et partage</li>
+        <li>Conservation et suppression</li>
+        <li>Sécurité</li>
+        <li>Vos droits</li>
+        <li>Contact</li>
+      </ol>
+    </div>
+  </div>
+
+  <section class="doc" id="qui-fait-quoi">
+    <h2>1. Qui fait quoi</h2>
+    <p>Askane Advisor est édité par <strong>Askane Studio</strong>. Quand un marchand installe
+      l'application sur sa boutique Shopify, c'est <strong>le marchand qui reste responsable du
+      traitement des données de ses propres clients</strong> — Askane Studio agit comme
+      prestataire technique, au service de la boutique qui a installé l'app, jamais comme
+      propriétaire des données qui y transitent.</p>
+    <p>Concrètement : si vous êtes cliente ou client d'une boutique qui utilise Askane Advisor,
+      c'est cette boutique qu'il faut contacter en premier lieu pour toute question sur vos
+      données — Askane Studio répond aussi directement aux demandes, voir la section Contact.</p>
+  </section>
+
+  <section class="doc" id="donnees-boutique">
+    <h2>2. Données de la boutique</h2>
+    <p>À l'installation, l'app demande l'accès à deux ressources Shopify, en <strong>lecture
+      seule</strong> :</p>
+    <div class="table-scroll">
+      <table class="data-table">
+        <thead>
+          <tr><th>Donnée</th><th>Usage</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Catalogue produits</td><td>Comprendre ce que vend la boutique, pour pouvoir recommander les bons articles.</td></tr>
+          <tr><td>Niveaux de stock</td><td>Ne jamais recommander un produit épuisé.</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>Ces informations sont analysées et indexées automatiquement pour permettre au conseiller
+      IA de faire des recommandations pertinentes. Elles ne sortent jamais du périmètre technique
+      nécessaire à ce service.</p>
+  </section>
+
+  <section class="doc" id="donnees-clients">
+    <h2>3. Données des clients finaux</h2>
+    <p>Quand un visiteur discute avec le conseiller Askane Advisor sur une boutique, un bandeau de
+      consentement est affiché avant tout échange. Une fois accepté, nous conservons :</p>
+    <ul>
+      <li>Le <strong>contenu de la conversation</strong> — pour générer une réponse pertinente et
+        pouvoir l'améliorer.</li>
+      <li>Un <strong>identifiant de canal</strong> selon la manière dont la conversation a démarré
+        (par exemple une adresse e-mail, un numéro de téléphone, ou un identifiant client
+        Shopify) — jamais plus que ce que le canal fournit lui-même.</li>
+      <li>La <strong>langue</strong> de la conversation et les <strong>intentions détectées</strong>
+        (par exemple : recherche d'un produit pour un usage particulier) — pour affiner les
+        réponses futures.</li>
+    </ul>
+    <div class="callout">Aucune donnée n'est utilisée à des fins marketing sans consentement
+      explicite et distinct — c'est précisé dans le bandeau affiché avant chaque conversation.</div>
+  </section>
+
+  <section class="doc" id="pourquoi">
+    <h2>4. Pourquoi ces données</h2>
+    <ul>
+      <li><strong>Répondre à la conversation</strong> — comprendre la demande et recommander les
+        bons produits du catalogue.</li>
+      <li><strong>Améliorer les réponses</strong> — les échanges passés aident à mieux répondre
+        aux futures questions similaires.</li>
+      <li><strong>Alerter le marchand</strong> — un échange signalant une insatisfaction ou un
+        litige déclenche une notification vers le canal d'alerte propre au marchand, pour qu'il
+        puisse intervenir rapidement.</li>
+    </ul>
+  </section>
+
+  <section class="doc" id="pas-collecte">
+    <h2>5. Ce que nous ne collectons jamais</h2>
+    <p>Askane Advisor n'a <strong>aucun accès</strong> aux commandes, à l'historique d'achat, aux
+      moyens de paiement, ni aux données de compte client Shopify au-delà de ce que le visiteur
+      partage lui-même dans la conversation. Les scopes demandés à l'installation se limitent au
+      catalogue produits et au stock — rien d'autre n'est techniquement accessible à l'app.</p>
+  </section>
+
+  <section class="doc" id="sous-traitants">
+    <h2>6. Sous-traitants et partage</h2>
+    <p>Pour fonctionner, Askane Advisor s'appuie sur un nombre restreint de prestataires
+      techniques, chacun limité au strict nécessaire :</p>
+    <div class="table-scroll">
+      <table class="data-table">
+        <thead>
+          <tr><th>Prestataire</th><th>Rôle</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Anthropic</td><td>Génère les réponses du conseiller à partir de la conversation.</td></tr>
+          <tr><td>Voyage AI</td><td>Indexe le catalogue produits et la demande du client pour trouver les articles pertinents.</td></tr>
+          <tr><td>Supabase</td><td>Hébergement de la base de données et de l'infrastructure applicative.</td></tr>
+          <tr><td>Telegram</td><td>Achemine les alertes de litige/détresse vers le canal privé du marchand — jamais vers un canal partagé entre marchands.</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>Ces prestataires peuvent traiter les données en dehors de l'Union européenne. Nous ne
+      transmettons aucune donnée à des fins publicitaires ni ne les revendons à des tiers.</p>
+  </section>
+
+  <section class="doc" id="conservation">
+    <h2>7. Conservation et suppression</h2>
+    <p>Les conversations sont conservées tant que nécessaire au service, ou jusqu'à suppression.
+      La suppression peut être déclenchée de trois façons :</p>
+    <ul>
+      <li>Automatiquement, si le marchand désinstalle l'application — toutes les données de la
+        boutique sont effacées.</li>
+      <li>Automatiquement, si une plateforme (comme Shopify) transmet une demande de suppression
+        pour un client précis.</li>
+      <li>Sur simple demande d'un client ou d'un marchand — voir Contact ci-dessous.</li>
+    </ul>
+  </section>
+
+  <section class="doc" id="securite">
+    <h2>8. Sécurité</h2>
+    <p>Les identifiants et jetons d'accès sont chiffrés et jamais stockés en clair. Chaque échange
+      technique entre Shopify et Askane Advisor est vérifié par signature avant traitement, pour
+      garantir qu'il provient bien de la boutique concernée.</p>
+  </section>
+
+  <section class="doc" id="droits">
+    <h2>9. Vos droits</h2>
+    <p>Selon votre lieu de résidence, vous disposez d'un droit d'accès, de rectification et
+      d'effacement de vos données. Pour l'exercer, contactez la boutique auprès de laquelle vous
+      avez échangé avec le conseiller, ou adressez-vous directement à Askane Studio (voir
+      Contact).</p>
+  </section>
+
+  <section class="doc" id="contact">
+    <h2>10. Contact</h2>
+    <p>Pour toute question sur cette politique ou pour exercer vos droits, écrivez à
+      <a href="mailto:chrisbadji@gmail.com">chrisbadji@gmail.com</a>.</p>
+  </section>
+
+  <footer>Cette page décrit le fonctionnement d'Askane Advisor tel qu'il existe aujourd'hui et
+    sera mise à jour si le service évolue.</footer>
+
+</div>
+</body>
+</html>
