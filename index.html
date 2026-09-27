@@ -1,0 +1,418 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Askane Advisor — Le conseiller produit IA pour boutiques Shopify</title>
+<meta name="description" content="Askane Advisor est un conseiller produit IA installé sur votre boutique Shopify. Vos clients décrivent ce qu'ils cherchent, il recommande les bons produits. En production chez Kamea Nature.">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+
+<style>
+  :root {
+    --ink: #15201a;
+    --ink-soft: #4b5a51;
+    --bg: #f7faf8;
+    --surface: #ffffff;
+    --surface-2: #eef4f0;
+    --border: #dde8e1;
+    --accent: #3d5ff0;
+    --accent-ink: #ffffff;
+    --accent-2: #2f7a54;
+    --accent-2-soft: #e3f1e9;
+    --mint: #c9ded3;
+    --shadow: 0 1px 2px rgba(21, 32, 26, 0.04), 0 12px 32px -16px rgba(21, 32, 26, 0.18);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --ink: #eef3ef;
+      --ink-soft: #a9bab1;
+      --bg: #10160f;
+      --surface: #172018;
+      --surface-2: #1d281f;
+      --border: #2a362c;
+      --accent: #6c86ff;
+      --accent-ink: #0b0f14;
+      --accent-2: #6bc699;
+      --accent-2-soft: #1c2f24;
+      --mint: #26382d;
+      --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 20px 44px -20px rgba(0, 0, 0, 0.55);
+    }
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: "IBM Plex Sans", system-ui, -apple-system, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1, h2, h3, .display {
+    font-family: "Space Grotesk", system-ui, sans-serif;
+    font-weight: 700;
+    margin: 0;
+  }
+
+  a { color: var(--accent); }
+  a:hover { color: var(--accent-2); }
+
+  .wrap {
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: 0 28px;
+  }
+
+  header.top {
+    padding: 28px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .brand {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+  }
+  .brand-left { display: flex; align-items: center; gap: 10px; }
+  .brand svg { flex-shrink: 0; }
+  .brand-name {
+    font-family: "Space Grotesk", sans-serif;
+    font-weight: 700;
+    font-size: 19px;
+    letter-spacing: -0.01em;
+  }
+  .brand-sub {
+    font-size: 12px;
+    color: var(--ink-soft);
+    letter-spacing: 0.02em;
+  }
+  nav.top-nav {
+    display: flex;
+    gap: 24px;
+    font-size: 14px;
+    font-weight: 500;
+  }
+  nav.top-nav a { color: var(--ink-soft); text-decoration: none; }
+  nav.top-nav a:hover { color: var(--ink); }
+  @media (max-width: 620px) {
+    nav.top-nav { display: none; }
+  }
+
+  .hero {
+    position: relative;
+    padding: 88px 0 56px;
+    overflow: hidden;
+  }
+  .hero-mark {
+    position: absolute;
+    top: -60px;
+    right: -60px;
+    width: 360px;
+    height: 360px;
+    opacity: 0.06;
+    pointer-events: none;
+  }
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 18px;
+  }
+  .eyebrow::before {
+    content: "";
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--accent);
+  }
+  h1.headline {
+    font-size: clamp(32px, 4.6vw, 48px);
+    line-height: 1.1;
+    letter-spacing: -0.015em;
+    max-width: 18ch;
+  }
+  .sub {
+    margin-top: 20px;
+    font-size: 18px;
+    line-height: 1.55;
+    color: var(--ink-soft);
+    max-width: 56ch;
+  }
+  .cta-row {
+    margin-top: 32px;
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    padding: 12px 22px;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: 600;
+    text-decoration: none;
+  }
+  .btn.primary { background: var(--accent); color: var(--accent-ink); }
+  .btn.ghost { background: var(--surface); color: var(--ink); border: 1px solid var(--border); }
+
+  .proof {
+    padding: 20px 0 64px;
+  }
+  .proof-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 18px 22px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    box-shadow: var(--shadow);
+    font-size: 14.5px;
+    color: var(--ink-soft);
+  }
+  .proof-card strong { color: var(--ink); }
+  .proof-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--accent-2); flex-shrink: 0;
+  }
+
+  .benefits { padding: 8px 0 72px; }
+  .benefits h2, .how h2, .cta-final h2 {
+    font-size: 26px;
+    letter-spacing: -0.01em;
+    margin-bottom: 8px;
+  }
+  .section-sub {
+    color: var(--ink-soft);
+    font-size: 15px;
+    max-width: 60ch;
+    margin-bottom: 32px;
+  }
+  .benefit-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+  @media (max-width: 860px) {
+    .benefit-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 620px) {
+    .benefit-grid { grid-template-columns: 1fr; }
+  }
+  .benefit-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 22px;
+  }
+  .benefit-card h3 {
+    font-size: 16px;
+    margin-bottom: 8px;
+  }
+  .benefit-card p {
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--ink-soft);
+  }
+
+  .how {
+    padding: 56px 0;
+    background: var(--surface-2);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+  .how-steps {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    margin-top: 8px;
+  }
+  @media (max-width: 760px) {
+    .how-steps { grid-template-columns: 1fr; }
+  }
+  .step-num {
+    font-family: "Space Grotesk", sans-serif;
+    font-weight: 700;
+    font-size: 13px;
+    color: var(--accent);
+    margin-bottom: 10px;
+  }
+  .how-steps h3 { font-size: 16px; margin-bottom: 8px; }
+  .how-steps p { margin: 0; font-size: 14px; line-height: 1.6; color: var(--ink-soft); }
+
+  .cta-final { padding: 72px 0; text-align: center; }
+  .cta-final .sub { margin-left: auto; margin-right: auto; }
+  .cta-final .cta-row { justify-content: center; }
+
+  footer {
+    padding: 32px 0 48px;
+    border-top: 1px solid var(--border);
+  }
+  footer .row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    font-size: 13px;
+    color: var(--ink-soft);
+  }
+  footer .links { display: flex; gap: 18px; }
+  footer a { color: var(--ink-soft); text-decoration: none; }
+  footer a:hover { color: var(--ink); }
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap brand">
+    <div class="brand-left">
+      <svg width="26" height="26" viewBox="0 0 100 100" aria-hidden="true">
+        <polygon points="18,82 44,18 55,18 29,82" fill="#15201a"/>
+        <polygon points="48,82 69,34 80,34 59,82" fill="#3d5ff0"/>
+      </svg>
+      <div>
+        <div class="brand-name">Askane Advisor</div>
+        <div class="brand-sub">par Askane Studio</div>
+      </div>
+    </div>
+    <nav class="top-nav">
+      <a href="#benefices">Bénéfices</a>
+      <a href="#comment-ca-marche">Comment ça marche</a>
+      <a href="pricing.html">Tarifs</a>
+      <a href="faq.html">FAQ</a>
+    </nav>
+  </div>
+</header>
+
+<section class="hero">
+  <svg class="hero-mark" viewBox="0 0 100 100" aria-hidden="true">
+    <polygon points="18,82 44,18 55,18 29,82" fill="#15201a"/>
+    <polygon points="48,82 69,34 80,34 59,82" fill="#3d5ff0"/>
+  </svg>
+  <div class="wrap">
+    <div class="eyebrow">Conseiller IA pour boutiques Shopify</div>
+    <h1 class="headline">Le conseiller produit IA qui aide vos clients à trouver le bon article, tout de suite.</h1>
+    <p class="sub">Vos clients arrivent avec une intention, pas un mot-clé exact. Askane Advisor
+      comprend leur demande en langage naturel et leur recommande les bons produits de votre
+      catalogue, avec un bouton d'ajout au panier immédiat — sans changer de page.</p>
+    <div class="cta-row">
+      <a class="btn primary" href="mailto:chrisbadji@gmail.com?subject=Demande%20de%20d%C3%A9mo%20Askane%20Advisor">Demander une démo personnalisée</a>
+      <a class="btn ghost" href="pricing.html">Voir les tarifs</a>
+    </div>
+  </div>
+</section>
+
+<section class="proof">
+  <div class="wrap">
+    <div class="proof-card">
+      <span class="proof-dot"></span>
+      <span><strong>En production aujourd'hui</strong> chez Kamea Nature, boutique française
+        d'encens et de rituels — pas une démo théorique, un vrai widget avec de vrais clients au
+        quotidien.</span>
+    </div>
+  </div>
+</section>
+
+<section class="benefits" id="benefices">
+  <div class="wrap">
+    <h2>Un conseiller, pas un moteur de recherche</h2>
+    <p class="section-sub">Le client décrit un besoin, pas un mot-clé. Askane Advisor comprend
+      l'intention et recommande les produits pertinents de votre catalogue — pas une liste de
+      résultats à trier soi-même.</p>
+    <div class="benefit-grid">
+      <div class="benefit-card">
+        <h3>Prêt en quelques minutes</h3>
+        <p>Installation en un clic, catalogue analysé automatiquement, widget activable
+          directement depuis l'éditeur de thème. Aucune configuration technique.</p>
+      </div>
+      <div class="benefit-card">
+        <h3>Configurable à votre image</h3>
+        <p>Ton de la conversation, message de bienvenue, nombre de produits recommandés par
+          réponse : tout se règle depuis une page intégrée à votre admin Shopify.</p>
+      </div>
+      <div class="benefit-card">
+        <h3>Alertes en temps réel</h3>
+        <p>Un client insatisfait ou en litige ? Vous êtes notifié instantanément sur Telegram,
+          pour intervenir avant que ça ne dégénère.</p>
+      </div>
+      <div class="benefit-card">
+        <h3>Respectueux de vos données</h3>
+        <p>Accès en lecture seule à votre catalogue (produits et stock) — jamais aux commandes ni
+          aux données personnelles de vos clients.</p>
+      </div>
+      <div class="benefit-card">
+        <h3>Un prix qui suit votre catalogue</h3>
+        <p>Indexé sur le nombre d'articles, pas sur le volume de conversations — vous savez ce que
+          vous allez payer avant même d'installer.</p>
+      </div>
+      <div class="benefit-card">
+        <h3>Essai gratuit de 14 jours</h3>
+        <p>Sur tous les paliers, sans engagement, résiliable à tout moment directement depuis
+          votre admin Shopify.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="how" id="comment-ca-marche">
+  <div class="wrap">
+    <h2>Comment ça marche</h2>
+    <p class="section-sub">Trois étapes, sans configuration technique de votre côté.</p>
+    <div class="how-steps">
+      <div>
+        <div class="step-num">01</div>
+        <h3>Installation simple</h3>
+        <p>Approuvez les permissions, votre catalogue est automatiquement analysé et indexé,
+          activez le widget dans l'éditeur de thème : votre conseiller IA est en ligne.</p>
+      </div>
+      <div>
+        <div class="step-num">02</div>
+        <h3>Configuration à votre main</h3>
+        <p>Ajustez le ton de la conversation, le message d'accueil, et le nombre de produits
+          recommandés par réponse depuis votre admin Shopify.</p>
+      </div>
+      <div>
+        <div class="step-num">03</div>
+        <h3>Vous restez informé</h3>
+        <p>Chaque échange difficile déclenche une alerte instantanée sur votre propre canal
+          Telegram — jamais un problème appris par une mauvaise note publique.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="cta-final">
+  <div class="wrap">
+    <h2>Envie de voir Askane Advisor sur votre propre catalogue ?</h2>
+    <p class="sub">On vous prépare une démo avec le fond de votre propre site et vos vrais
+      produits déjà chargés dedans — deux minutes suffisent pour se faire une idée.</p>
+    <div class="cta-row">
+      <a class="btn primary" href="mailto:chrisbadji@gmail.com?subject=Demande%20de%20d%C3%A9mo%20Askane%20Advisor">Demander ma démo</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap row">
+    <span>Askane Advisor — par Askane Studio</span>
+    <div class="links">
+      <a href="pricing.html">Tarifs</a>
+      <a href="faq.html">FAQ</a>
+      <a href="privacy.html">Confidentialité</a>
+      <a href="mailto:chrisbadji@gmail.com">Contact</a>
+    </div>
+  </div>
+</footer>
+</body>
+</html>
